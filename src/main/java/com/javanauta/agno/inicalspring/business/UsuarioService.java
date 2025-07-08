@@ -5,6 +5,7 @@ import com.javanauta.agno.inicalspring.infrastructure.entity.Usuario;
 import com.javanauta.agno.inicalspring.infrastructure.exceptions.ConflictException;
 import com.javanauta.agno.inicalspring.infrastructure.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,10 +16,12 @@ import java.util.Optional;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public Usuario salvarUsuario(Usuario usuario){
         try {
             emailExiste(usuario.getEmail());
+            usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
          return usuarioRepository.save(usuario);
 
         }catch (ConflictException e) {
